@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TANZANEER Update Creator</title>
+    <style>
+        body {
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .card-header {
+            background: #0077B5;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        textarea {
+            height: 100px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-primary { background: #0077B5; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        
+        /* Preview Styles */
+        .preview-status {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+        .preview-tabs {
+            display: flex;
+            background: #f5f5f5;
+            padding: 10px 10px 0;
+            gap: 5px;
+        }
+        .preview-tab {
+            padding: 10px 20px;
+            background: #e9ecef;
+            border: none;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            flex-grow: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+        .preview-tab.active {
+            background: #0077B5;
+            color: white;
+        }
+        .preview-content {
+            padding: 20px;
+            min-height: 200px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Photo Gallery */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .photo-preview {
+            position: relative;
+            padding-bottom: 100%;
+            background: #f5f5f5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .photo-preview img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .remove-photo {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background: rgba(220, 53, 69, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .preview-controls {
+            display: flex;
+            gap: 10px;
+        }
+        .preview-button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        /* Donation Button */
+        .donate-button {
+            display: inline-block;
+            background: #e4007e;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            margin: 20px auto;
+            width: 200px;
+            transition: background-color 0.3s;
+        }
+        .donate-button:hover {
+            background: #c50070;
+        }
+        .donate-message {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Preview Card -->
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2>Currently Viewing: <span id="currentView">Our Story</span></h2>
+                </div>
+                <div class="preview-controls">
+                    <button class="preview-button" id="playPreview">Play Preview</button>
+                    <button class="preview-button" id="stopPreview">Stop</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="preview-tabs">
+                    <button class="preview-tab active" data-tab="story">Our Story</button>
+                    <button class="preview-tab" data-tab="impact">Our Impact</button>
+                    <button class="preview-tab" data-tab="prayer">Prayer Points</button>
+                    <button class="preview-tab" data-tab="support">Support Us</button>
+                </div>
+                <div class="preview-content" id="previewContent"></div>
+            </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Create TANZANEER Update</h2>
+            </div>
+            <div class="card-body">
+                <form id="updateForm">
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location in Tanzania:</label>
+                        <input type="text" id="location" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="story">Story:</label>
+                        <textarea id="story" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="impact">Impact:</label>
+                        <textarea id="impact" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="prayer">Prayer Points:</label>
+                        <textarea id="prayer" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="photos">Add Photos:</label>
+                        <input type="file" id="photos" accept="image/*" multiple>
+                        <div id="photoGallery" class="photo-gallery"></div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn-primary" id="loadDemo">Load Demo</button>
+                        <button type="button" class="btn-danger" id="clearForm">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo content
+        const demoContent = {
+            title: "Clean Water Project - Moshi Village",
+            location: "Moshi Region, Tanzania",
+            story: "Today marks an exciting milestone in our well-drilling project! The community gathered to celebrate as clean water flowed for the first time. Local children helped paint the well housing with beautiful artwork.",
+            impact: "Project Impact:\n• 200+ families now have clean water\n• Water collection time reduced from 3 hours to 5 minutes\n• Local school attendance increased by 30%",
+            prayer: "Prayer Points:\n1. Wisdom for maintenance team\n2. Protection of well system\n3. Community unity\n4. Health improvements"
+        };
+
+        let photoFiles = [];
+        let currentTab = 'story';
+        let previewTimer = null;
+        let cycleCount = 0;
+
+        // Update preview function
+        function updatePreview() {
+            const title = document.getElementById('title').value || 'Your Title Here';
+            const location = document.getElementById('location').value || 'Location';
+            let content = '';
+
+            if (currentTab === 'support') {
+                content = `
+                    <div class="donate-message">
+                        Support our mission to bring clean water to communities in Tanzania. 
+                        Every donation helps us make a lasting difference.
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="https://tiamoyo-gdg-j919n.raisely.com/" target="_blank" class="donate-button">
+                            Donate Now
+                        </a>
+                    </div>
+                `;
+            } else {
+                const tabContent = document.getElementById(currentTab).value || `Your ${currentTab} content`;
+                content = `
+                    <div class="content">${tabContent.replace(/\n/g, '<br>')}</div>
+                    ${photoFiles.length > 0 ? `
+                        <div class="photo-gallery">
+                            ${photoFiles.map(photo => `
+                                <div class="photo-preview">
+                                    <img src="${photo.data}" alt="Preview">
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                `;
+            }
+
+            document.getElementById('previewContent').innerHTML = `
+                <h3>${title}</h3>
+                <p><strong>${location}</strong></p>
+                ${content}
+            `;
+
+            // Update current view text
+            const tabNames = {
+                'story': 'Our Story',
+                'impact': 'Our Impact',
+                'prayer': 'Prayer Points',
+                'support': 'Support Us'
+            };
+            document.getElementById('currentView').textContent = tabNames[currentTab];
+        }
+
+        // Handle tab switching
+        document.querySelectorAll('.preview-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentTab = tab.dataset.tab;
+                updatePreview();
+            });
+        });
+
+        // Handle preview playback
+        function startPreview() {
+            const tabs = ['story', 'impact', 'prayer', 'support'];
+            let tabIndex = 0;
+            cycleCount = 0;
+
+            function playNextTab() {
+                if (tabIndex >= tabs.length) {
+                    tabIndex = 0;
+                    cycleCount++;
+                    if (cycleCount >= 1) {
+                        stopPreview();
+                        return;
+                    }
+                }
+                currentTab = tabs[tabIndex];
+                document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+                document.querySelector(`[data-tab="${currentTab}"]`).classList.add('active');
+                updatePreview();
+                tabIndex++;
+            }
+
+            stopPreview();
+            playNextTab();
+            previewTimer = setInterval(playNextTab, 3000);
+        }
+
+        function stopPreview() {
+            if (previewTimer) {
+                clearInterval(previewTimer);
+                previewTimer = null;
+            }
+        }
+
+        // Handle photo uploads
+        document.getElementById('photos').addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            for (const file of files) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    photoFiles.push({
+                        name: file.name,
+                        data: reader.result
+                    });
+                    updatePhotoGallery();
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function updatePhotoGallery() {
+            const gallery = document.getElementById('photoGallery');
+            gallery.innerHTML = photoFiles.map((photo, index) => `
+                <div class="photo-preview">
+                    <img src="${photo.data}" alt="Preview">
+                    <button class="remove-photo" onclick="removePhoto(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function removePhoto(index) {
+            photoFiles.splice(index, 1);
+            updatePhotoGallery();
+            updatePreview();
+        }
+
+        // Load demo content
+        document.getElementById('loadDemo').addEventListener('click', () => {
+            Object.entries(demoContent).forEach(([key, value]) => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.value = value;
+                }
+            });
+            updatePreview();
+        });
+
+        // Clear form
+        document.getElementById('clearForm').addEventListener('click', () => {
+            document.getElementById('updateForm').reset();
+            photoFiles = [];
+            updatePhotoGallery();
+            updatePreview();
+        });
+
+        // Add play/stop listeners
+        document.getElementById('playPreview').addEventListener('click', startPreview);
+        document.getElementById('stopPreview').addEventListener('click', stopPreview);
+
+        // Add live preview updates
+        ['title', 'location', 'story', 'impact', 'prayer'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePreview);
+        });
+
+        // Initialize preview
+        updatePreview();
+    </script>
+</body>
+</html>
