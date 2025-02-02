@@ -17,7 +17,6 @@
             line-height: 1.6;
         }
 
-        /* Header Styles */
         .header {
             position: relative;
             width: 100%;
@@ -57,7 +56,6 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* Container & Card Styles */
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -72,14 +70,13 @@
             overflow: hidden;
         }
 
-        /* Button Bar Styles */
         .button-bar {
             background: #f5f5f5;
             padding: 15px;
             text-align: right;
-            gap: 10px;
             display: flex;
             justify-content: flex-end;
+            gap: 10px;
         }
 
         .button {
@@ -105,7 +102,6 @@
             background: #c82333;
         }
 
-        /* Form Styles */
         .form-content {
             padding: 20px;
         }
@@ -118,7 +114,6 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #333;
         }
 
         input, textarea {
@@ -127,32 +122,11 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #0077B5;
         }
 
         textarea {
             height: 120px;
             resize: vertical;
-        }
-
-        /* Photo Upload Styles */
-        .photo-status {
-            margin-top: 10px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .photo-url {
-            font-size: 12px;
-            color: #28a745;
-            margin: 5px 0;
         }
 
         .photo-preview {
@@ -191,23 +165,32 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s;
         }
 
-        .remove-photo:hover {
-            background: rgba(220, 53, 69, 1);
-        }
-
-        /* Preview Styles */
         .preview {
             display: none;
-            opacity: 0;
-            transition: opacity 0.3s;
         }
 
         .preview.visible {
             display: block;
-            opacity: 1;
+        }
+
+        .preview-header-image {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .preview-header-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.5));
         }
 
         .preview-header {
@@ -225,13 +208,10 @@
             color: #666;
         }
 
-        /* Tab Styles */
         .tabs {
             display: flex;
             background: #f5f5f5;
             border-bottom: 1px solid #eee;
-            padding: 2px;
-            gap: 2px;
         }
 
         .tab {
@@ -242,11 +222,6 @@
             flex: 1;
             font-size: 16px;
             transition: all 0.3s;
-            border-radius: 4px 4px 0 0;
-        }
-
-        .tab:hover {
-            background: #e9ecef;
         }
 
         .tab.active {
@@ -257,16 +232,12 @@
         .tab-content {
             padding: 20px;
             display: none;
-            opacity: 0;
-            transition: opacity 0.3s;
         }
 
         .tab-content.active {
             display: block;
-            opacity: 1;
         }
 
-        /* Photo Grid in Preview */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -302,7 +273,6 @@
             font-size: 14px;
         }
 
-        /* Donate Button */
         .donate-button {
             display: inline-block;
             background: #e4007e;
@@ -313,14 +283,22 @@
             border-radius: 4px;
             margin: 20px auto;
             font-weight: bold;
-            transition: background-color 0.3s;
         }
 
-        .donate-button:hover {
-            background: #c50070;
+        .photo-status {
+            margin-top: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
-        /* Responsive Styles */
+        .photo-url {
+            font-size: 12px;
+            color: #28a745;
+            margin: 5px 0;
+        }
+
         @media (max-width: 768px) {
             .header {
                 height: 300px;
@@ -333,6 +311,9 @@
                 padding: 8px 12px;
                 font-size: 14px;
             }
+            .preview-header-image {
+                height: 200px;
+            }
         }
     </style>
 </head>
@@ -343,13 +324,11 @@
     </div>
 
     <div class="container">
-        <!-- Update Form -->
         <div class="card">
             <div class="button-bar">
                 <button class="button clear" onclick="clearForm()">Clear Form</button>
                 <button class="button" onclick="loadSample()">Load Sample</button>
             </div>
-
             <div class="form-content">
                 <div class="form-group">
                     <label for="title">Update Title</label>
@@ -359,6 +338,11 @@
                 <div class="form-group">
                     <label for="location">Location</label>
                     <input type="text" id="location" placeholder="Where did this take place?">
+                </div>
+
+                <div class="form-group">
+                    <label for="headerImage">Header Image URL</label>
+                    <input type="text" id="headerImage" placeholder="Enter URL for header image">
                 </div>
 
                 <div class="form-group">
@@ -387,8 +371,8 @@
             </div>
         </div>
 
-        <!-- Preview Section -->
         <div id="preview" class="card preview">
+            <div class="preview-header-image" id="previewHeaderImage"></div>
             <div class="preview-header">
                 <h3 class="preview-title" id="previewTitle"></h3>
                 <div class="preview-location" id="previewLocation"></div>
@@ -438,24 +422,29 @@
     const sampleData = {
         title: "Clean Water Project Success in Moshi",
         location: "Moshi Region, Tanzania",
+        headerImage: "https://i.ibb.co/5hmHtVBV/IMG-1920.jpg",
         story: "Today marks an incredible milestone in our well-drilling project! The entire community gathered to celebrate as clean water flowed for the first time from our newly completed well. The joy on everyone's faces was unforgettable as children helped paint the well housing with beautiful artwork representing their hopes and dreams.",
         impact: "• Over 200 families now have access to clean water\n• Water collection time reduced from 3 hours to 5 minutes\n• Local school attendance has increased by 30%\n• Community health clinic reports 45% reduction in waterborne illnesses\n• Created local jobs for well maintenance",
         prayer: "1. Wisdom for the maintenance team as they care for the well system\n2. Protection of the well infrastructure\n3. Continued unity within the community\n4. Health improvements for all families using the well\n5. Success of water safety education programs",
         photos: [
             {
-                url: "https://i.ibb.co/sample-image-1",
-                name: "Community gathering"
+                url: "https://i.ibb.co/q31PcpRM/IMG-1919.jpg",
+                name: "Community Project 1"
             },
             {
-                url: "https://i.ibb.co/sample-image-2",
-                name: "Well completion"
+                url: "https://i.ibb.co/XZ2c2pMb/IMG-1918.jpg",
+                name: "Community Project 2"
+            },
+            {
+                url: "https://i.ibb.co/hJkv3M47/IMG-1921.jpg",
+                name: "Community Project 3"
             }
         ]
     };
 
-    // Form Management Functions
+    // Form Management
     function clearForm() {
-        const formFields = ['title', 'location', 'story', 'impact', 'prayer'];
+        const formFields = ['title', 'location', 'headerImage', 'story', 'impact', 'prayer'];
         formFields.forEach(field => {
             document.getElementById(field).value = '';
         });
@@ -466,25 +455,20 @@
     }
 
     function loadSample() {
-        const formFields = {
-            title: sampleData.title,
-            location: sampleData.location,
-            story: sampleData.story,
-            impact: sampleData.impact,
-            prayer: sampleData.prayer
-        };
-
-        Object.entries(formFields).forEach(([field, value]) => {
-            document.getElementById(field).value = value;
-        });
-
+        document.getElementById('title').value = sampleData.title;
+        document.getElementById('location').value = sampleData.location;
+        document.getElementById('headerImage').value = sampleData.headerImage;
+        document.getElementById('story').value = sampleData.story;
+        document.getElementById('impact').value = sampleData.impact;
+        document.getElementById('prayer').value = sampleData.prayer;
+        
         uploadedPhotos = [...sampleData.photos];
         updatePhotoPreview();
         updatePhotoStatus();
         previewUpdate();
     }
 
-    // Photo Handling Functions
+    // Photo Handling
     async function handlePhotos(event) {
         const files = event.target.files;
         
@@ -582,46 +566,6 @@
         `;
     }
 
-    // Preview Management Functions
-    function hidePreview() {
-        const preview = document.getElementById('preview');
-        preview.classList.remove('visible');
-        if (rotationInterval) {
-            clearInterval(rotationInterval);
-        }
-    }
-
-    function previewUpdate() {
-        const preview = document.getElementById('preview');
-        if (!preview) return;
-
-        const formFields = ['title', 'location', 'story', 'impact', 'prayer'];
-        const values = {};
-        
-        // Collect all form values
-        formFields.forEach(field => {
-            values[field] = document.getElementById(field).value.trim();
-        });
-
-        // Validate required fields
-        if (!values.title || !values.location || !values.story) {
-            alert('Please fill in at least the title, location, and story.');
-            return;
-        }
-
-        // Update preview content
-        document.getElementById('previewTitle').textContent = values.title;
-        document.getElementById('previewLocation').textContent = values.location;
-
-        document.getElementById('storyTab').innerHTML = `<p>${values.story.replace(/\n/g, '<br>')}</p>`;
-        document.getElementById('impactTab').innerHTML = `<p>${values.impact.replace(/\n/g, '<br>')}</p>`;
-        document.getElementById('prayerTab').innerHTML = `<p>${values.prayer.replace(/\n/g, '<br>')}</p>`;
-        
-        updatePhotoTab();
-        preview.classList.add('visible');
-        startRotation();
-    }
-
     function updatePhotoTab() {
         const grid = document.getElementById('photoGrid');
         if (!grid) return;
@@ -634,7 +578,54 @@
         `).join('');
     }
 
-    // Tab Management Functions
+    // Preview Management
+    function hidePreview() {
+        const preview = document.getElementById('preview');
+        preview.classList.remove('visible');
+        if (rotationInterval) {
+            clearInterval(rotationInterval);
+        }
+    }
+
+    function previewUpdate() {
+        const preview = document.getElementById('preview');
+        if (!preview) return;
+
+        const formFields = {
+            title: document.getElementById('title').value.trim(),
+            location: document.getElementById('location').value.trim(),
+            headerImage: document.getElementById('headerImage').value.trim(),
+            story: document.getElementById('story').value.trim(),
+            impact: document.getElementById('impact').value.trim(),
+            prayer: document.getElementById('prayer').value.trim()
+        };
+
+        // Validate required fields
+        if (!formFields.title || !formFields.location || !formFields.story) {
+            alert('Please fill in at least the title, location, and story.');
+            return;
+        }
+
+        // Update header image
+        const headerImage = document.getElementById('previewHeaderImage');
+        if (headerImage && formFields.headerImage) {
+            headerImage.style.backgroundImage = `url(${formFields.headerImage})`;
+        }
+
+        // Update content
+        document.getElementById('previewTitle').textContent = formFields.title;
+        document.getElementById('previewLocation').textContent = formFields.location;
+        
+        document.getElementById('storyTab').innerHTML = `<p>${formFields.story.replace(/\n/g, '<br>')}</p>`;
+        document.getElementById('impactTab').innerHTML = `<p>${formFields.impact.replace(/\n/g, '<br>')}</p>`;
+        document.getElementById('prayerTab').innerHTML = `<p>${formFields.prayer.replace(/\n/g, '<br>')}</p>`;
+        
+        updatePhotoTab();
+        preview.classList.add('visible');
+        startRotation();
+    }
+
+    // Tab Management
     function switchTab(tabId) {
         if (rotationInterval) {
             clearInterval(rotationInterval);
