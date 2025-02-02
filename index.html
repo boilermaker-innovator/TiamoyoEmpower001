@@ -17,11 +17,13 @@
             line-height: 1.6;
         }
 
+        /* Header Styles */
         .header {
             position: relative;
             width: 100%;
             height: 500px;
             overflow: hidden;
+            background-color: #2c3e50;
         }
 
         .header::before {
@@ -31,7 +33,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4));
+            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.4));
             z-index: 1;
         }
 
@@ -55,6 +57,7 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
+        /* Container & Card Styles */
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -69,10 +72,14 @@
             overflow: hidden;
         }
 
+        /* Button Bar Styles */
         .button-bar {
             background: #f5f5f5;
-            padding: 10px;
+            padding: 15px;
             text-align: right;
+            gap: 10px;
+            display: flex;
+            justify-content: flex-end;
         }
 
         .button {
@@ -83,12 +90,22 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
+            transition: background-color 0.3s;
         }
 
         .button:hover {
             background: #005b8b;
         }
 
+        .button.clear {
+            background: #dc3545;
+        }
+
+        .button.clear:hover {
+            background: #c82333;
+        }
+
+        /* Form Styles */
         .form-content {
             padding: 20px;
         }
@@ -101,6 +118,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
+            color: #333;
         }
 
         input, textarea {
@@ -109,6 +127,12 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #0077B5;
         }
 
         textarea {
@@ -116,6 +140,7 @@
             resize: vertical;
         }
 
+        /* Photo Upload Styles */
         .photo-status {
             margin-top: 10px;
             padding: 15px;
@@ -166,27 +191,47 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.3s;
         }
 
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+        .remove-photo:hover {
+            background: rgba(220, 53, 69, 1);
         }
 
+        /* Preview Styles */
         .preview {
             display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .preview.visible {
             display: block;
+            opacity: 1;
         }
 
+        .preview-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .preview-title {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .preview-location {
+            color: #666;
+        }
+
+        /* Tab Styles */
         .tabs {
             display: flex;
             background: #f5f5f5;
             border-bottom: 1px solid #eee;
+            padding: 2px;
+            gap: 2px;
         }
 
         .tab {
@@ -196,6 +241,12 @@
             cursor: pointer;
             flex: 1;
             font-size: 16px;
+            transition: all 0.3s;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
         }
 
         .tab.active {
@@ -206,12 +257,52 @@
         .tab-content {
             padding: 20px;
             display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .tab-content.active {
             display: block;
+            opacity: 1;
         }
 
+        /* Photo Grid in Preview */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .photo-item {
+            position: relative;
+            padding-bottom: 100%;
+            background: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .photo-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        /* Donate Button */
         .donate-button {
             display: inline-block;
             background: #e4007e;
@@ -222,12 +313,14 @@
             border-radius: 4px;
             margin: 20px auto;
             font-weight: bold;
+            transition: background-color 0.3s;
         }
 
         .donate-button:hover {
             background: #c50070;
         }
 
+        /* Responsive Styles */
         @media (max-width: 768px) {
             .header {
                 height: 300px;
@@ -250,10 +343,13 @@
     </div>
 
     <div class="container">
+        <!-- Update Form -->
         <div class="card">
             <div class="button-bar">
-                <button class="button" onclick="loadSample()">Load Sample Update</button>
+                <button class="button clear" onclick="clearForm()">Clear Form</button>
+                <button class="button" onclick="loadSample()">Load Sample</button>
             </div>
+
             <div class="form-content">
                 <div class="form-group">
                     <label for="title">Update Title</label>
@@ -287,10 +383,11 @@
                     <div id="photoPreview" class="photo-preview"></div>
                 </div>
 
-                <button class="button" onclick="showPreview()">Preview Update</button>
+                <button type="button" class="button" onclick="previewUpdate()">Preview Update</button>
             </div>
         </div>
 
+        <!-- Preview Section -->
         <div id="preview" class="card preview">
             <div class="preview-header">
                 <h3 class="preview-title" id="previewTitle"></h3>
@@ -325,21 +422,25 @@
         </div>
     </div>
 
-    <!-- JavaScript will be in part 2 -->
+    <!-- JavaScript will be in Part 2 -->
 </body>
 </html>
 <!-- Add this script section just before the closing </body> tag -->
 <script>
+    // Configuration and State
     const IMGBB_API_KEY = '59cd5b2935b5b01bc744b5b0a1d26ee0';
+    const MAX_PHOTOS = 6;
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     let uploadedPhotos = [];
     let rotationInterval;
 
+    // Sample Data
     const sampleData = {
         title: "Clean Water Project Success in Moshi",
         location: "Moshi Region, Tanzania",
         story: "Today marks an incredible milestone in our well-drilling project! The entire community gathered to celebrate as clean water flowed for the first time from our newly completed well. The joy on everyone's faces was unforgettable as children helped paint the well housing with beautiful artwork representing their hopes and dreams.",
-        impact: "• Over 200 families now have access to clean water\n• Water collection time reduced from 3 hours to 5 minutes\n• Local school attendance has increased by 30%\n• Community health clinic reports 45% reduction in waterborne illnesses",
-        prayer: "1. Wisdom for the maintenance team as they care for the well system\n2. Protection of the well infrastructure\n3. Continued unity within the community\n4. Health improvements for all families using the well",
+        impact: "• Over 200 families now have access to clean water\n• Water collection time reduced from 3 hours to 5 minutes\n• Local school attendance has increased by 30%\n• Community health clinic reports 45% reduction in waterborne illnesses\n• Created local jobs for well maintenance",
+        prayer: "1. Wisdom for the maintenance team as they care for the well system\n2. Protection of the well infrastructure\n3. Continued unity within the community\n4. Health improvements for all families using the well\n5. Success of water safety education programs",
         photos: [
             {
                 url: "https://i.ibb.co/sample-image-1",
@@ -352,11 +453,43 @@
         ]
     };
 
+    // Form Management Functions
+    function clearForm() {
+        const formFields = ['title', 'location', 'story', 'impact', 'prayer'];
+        formFields.forEach(field => {
+            document.getElementById(field).value = '';
+        });
+        uploadedPhotos = [];
+        updatePhotoPreview();
+        updatePhotoStatus();
+        hidePreview();
+    }
+
+    function loadSample() {
+        const formFields = {
+            title: sampleData.title,
+            location: sampleData.location,
+            story: sampleData.story,
+            impact: sampleData.impact,
+            prayer: sampleData.prayer
+        };
+
+        Object.entries(formFields).forEach(([field, value]) => {
+            document.getElementById(field).value = value;
+        });
+
+        uploadedPhotos = [...sampleData.photos];
+        updatePhotoPreview();
+        updatePhotoStatus();
+        previewUpdate();
+    }
+
+    // Photo Handling Functions
     async function handlePhotos(event) {
         const files = event.target.files;
         
-        if (uploadedPhotos.length + files.length > 6) {
-            alert('Maximum 6 photos allowed');
+        if (uploadedPhotos.length + files.length > MAX_PHOTOS) {
+            alert(`Maximum ${MAX_PHOTOS} photos allowed`);
             return;
         }
 
@@ -364,7 +497,7 @@
         statusDiv.innerHTML = '<p>Uploading photos... Please wait.</p>';
 
         for (let file of files) {
-            if (file.size > 5 * 1024 * 1024) {
+            if (file.size > MAX_FILE_SIZE) {
                 alert(`File ${file.name} is too large. Please keep files under 5MB`);
                 continue;
             }
@@ -411,6 +544,8 @@
 
     function updatePhotoPreview() {
         const preview = document.getElementById('photoPreview');
+        if (!preview) return;
+        
         preview.innerHTML = uploadedPhotos.map((photo, index) => `
             <div class="photo-preview-item">
                 <img src="${photo.url}" alt="Preview">
@@ -429,9 +564,16 @@
 
     function updatePhotoStatus() {
         const statusDiv = document.getElementById('photoStatus');
+        if (!statusDiv) return;
+
+        if (uploadedPhotos.length === 0) {
+            statusDiv.innerHTML = '';
+            return;
+        }
+
         statusDiv.innerHTML = `
             <div class="photo-status">
-                <p><strong>Uploaded photos:</strong> ${uploadedPhotos.length} of 6 maximum</p>
+                <p><strong>Uploaded photos:</strong> ${uploadedPhotos.length} of ${MAX_PHOTOS} maximum</p>
                 <p class="photo-note">Photos are stored securely on ImgBB</p>
                 ${uploadedPhotos.map(photo => `
                     <p class="photo-url">✓ ${photo.name} uploaded successfully</p>
@@ -440,61 +582,75 @@
         `;
     }
 
-    function updatePhotoTab() {
-        const grid = document.getElementById('photoGrid');
-        if (grid) {
-            grid.innerHTML = uploadedPhotos.map(photo => `
-                <div class="photo-item">
-                    <img src="${photo.url}" alt="Update photo">
-                    <div class="photo-caption">${photo.name}</div>
-                </div>
-            `).join('');
+    // Preview Management Functions
+    function hidePreview() {
+        const preview = document.getElementById('preview');
+        preview.classList.remove('visible');
+        if (rotationInterval) {
+            clearInterval(rotationInterval);
         }
     }
 
-    function loadSample() {
-        document.getElementById('title').value = sampleData.title;
-        document.getElementById('location').value = sampleData.location;
-        document.getElementById('story').value = sampleData.story;
-        document.getElementById('impact').value = sampleData.impact;
-        document.getElementById('prayer').value = sampleData.prayer;
-        uploadedPhotos = sampleData.photos;
-        updatePhotoPreview();
-        updatePhotoStatus();
-        showPreview();
-    }
-
-    function showPreview() {
+    function previewUpdate() {
         const preview = document.getElementById('preview');
-        preview.classList.add('visible');
+        if (!preview) return;
 
-        document.getElementById('previewTitle').textContent = document.getElementById('title').value;
-        document.getElementById('previewLocation').textContent = document.getElementById('location').value;
+        const formFields = ['title', 'location', 'story', 'impact', 'prayer'];
+        const values = {};
+        
+        // Collect all form values
+        formFields.forEach(field => {
+            values[field] = document.getElementById(field).value.trim();
+        });
 
-        document.getElementById('storyTab').innerHTML = `<p>${document.getElementById('story').value.replace(/\n/g, '<br>')}</p>`;
-        document.getElementById('impactTab').innerHTML = `<p>${document.getElementById('impact').value.replace(/\n/g, '<br>')}</p>`;
-        document.getElementById('prayerTab').innerHTML = `<p>${document.getElementById('prayer').value.replace(/\n/g, '<br>')}</p>`;
+        // Validate required fields
+        if (!values.title || !values.location || !values.story) {
+            alert('Please fill in at least the title, location, and story.');
+            return;
+        }
+
+        // Update preview content
+        document.getElementById('previewTitle').textContent = values.title;
+        document.getElementById('previewLocation').textContent = values.location;
+
+        document.getElementById('storyTab').innerHTML = `<p>${values.story.replace(/\n/g, '<br>')}</p>`;
+        document.getElementById('impactTab').innerHTML = `<p>${values.impact.replace(/\n/g, '<br>')}</p>`;
+        document.getElementById('prayerTab').innerHTML = `<p>${values.prayer.replace(/\n/g, '<br>')}</p>`;
         
         updatePhotoTab();
+        preview.classList.add('visible');
         startRotation();
     }
 
+    function updatePhotoTab() {
+        const grid = document.getElementById('photoGrid');
+        if (!grid) return;
+
+        grid.innerHTML = uploadedPhotos.map(photo => `
+            <div class="photo-item">
+                <img src="${photo.url}" alt="Update photo">
+                <div class="photo-caption">${photo.name}</div>
+            </div>
+        `).join('');
+    }
+
+    // Tab Management Functions
     function switchTab(tabId) {
         if (rotationInterval) {
             clearInterval(rotationInterval);
         }
 
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.getAttribute('onclick').includes(tabId)) {
-                tab.classList.add('active');
-            }
-        });
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
 
-        document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
-        });
-        document.getElementById(tabId).classList.add('active');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        contents.forEach(content => content.classList.remove('active'));
+
+        const selectedTab = document.querySelector(`.tab[onclick*="${tabId}"]`);
+        const selectedContent = document.getElementById(tabId);
+
+        if (selectedTab) selectedTab.classList.add('active');
+        if (selectedContent) selectedContent.classList.add('active');
     }
 
     function startRotation() {
@@ -505,12 +661,14 @@
         const tabs = ['storyTab', 'photosTab', 'impactTab', 'prayerTab', 'supportTab'];
         let currentIndex = 0;
 
+        switchTab(tabs[currentIndex]); // Show first tab immediately
+
         rotationInterval = setInterval(() => {
             currentIndex = (currentIndex + 1) % tabs.length;
             switchTab(tabs[currentIndex]);
         }, 4000);
     }
 
-    // Initialize with sample data on page load
-    window.onload = loadSample;
+    // Initialize with blank form
+    document.addEventListener('DOMContentLoaded', clearForm);
 </script>
